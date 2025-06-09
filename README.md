@@ -43,8 +43,10 @@ Back end repo for the Clioguesser historical geography game
 
 2. To populate the database with geographical data from a GeoJSON file, use the custom management command:
    ```
-   python populate_cliopatria.py <path_to_geojson_file>
+   cd clioguesser_backend
+   python populate_cliopatria.py data/cliopatria_polities_only.geojson
    ```
+   - Note: check the data file has this name, or adjust the command accordingly.
 
 ## Django notes
 
