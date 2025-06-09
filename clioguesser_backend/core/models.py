@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.gis.db import models as geomodels
 
 class Cliopatria(models.Model):
     """
@@ -6,8 +7,8 @@ class Cliopatria(models.Model):
     """
 
     id = models.AutoField(primary_key=True)
-    geom = models.MultiPolygonField()
-    simplified_geom = models.MultiPolygonField(null=True)
+    geom = geomodels.MultiPolygonField()
+    simplified_geom = geomodels.MultiPolygonField()
     name = models.CharField(max_length=100)
     wikipedia_name = models.CharField(max_length=100, null=True)
     seshat_id = models.CharField(max_length=100)
