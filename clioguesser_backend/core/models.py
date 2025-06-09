@@ -8,7 +8,7 @@ class Cliopatria(models.Model):
 
     id = models.AutoField(primary_key=True)
     geom = geomodels.MultiPolygonField()
-    simplified_geom = geomodels.MultiPolygonField()
+    # simplified_geom = geomodels.MultiPolygonField()
     name = models.CharField(max_length=100)
     wikipedia_name = models.CharField(max_length=100, null=True)
     seshat_id = models.CharField(max_length=100)

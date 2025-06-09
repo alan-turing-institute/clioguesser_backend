@@ -102,25 +102,3 @@ class Command(BaseCommand):
             )
         )
 
-        ###########################################################
-        ### Adjust the tolerance param of ST_Simplify as needed ###
-        ###########################################################
-
-        self.stdout.write(
-            self.style.SUCCESS("Adding simplified geometries for faster loading...")
-        )
-
-        ## Use this code if you want to simplify the geometries
-        # with connection.cursor() as cursor:
-        #     cursor.execute("""
-        #         UPDATE core_cliopatria
-        #         SET simplified_geom = ST_Simplify(geom, 0.07);
-        #     """)
-
-        ## Use this code if you don't need to simplify the geometries
-        with connection.cursor() as cursor:
-            cursor.execute("""
-                UPDATE core_cliopatria
-                SET simplified_geom = geom;
-            """)
-        self.stdout.write(self.style.SUCCESS("Simplified geometries added"))
