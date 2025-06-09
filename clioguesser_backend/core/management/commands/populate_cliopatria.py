@@ -13,23 +13,11 @@ class Command(BaseCommand):
         parser.add_argument("geojson_file", type=str, help="Path to the geojson file")
 
     def handle(self, *args, **options):
-        # Ensure the file exists and has the suffix "_seshat_processed.geojson"
+        # Ensure the file exists
         cliopatria_geojson_path = options["geojson_file"]
         if not os.path.exists(cliopatria_geojson_path):
             self.stdout.write(
                 self.style.ERROR(f"File {cliopatria_geojson_path} does not exist")
-            )
-            return
-        if not cliopatria_geojson_path.endswith("_seshat_processed.geojson"):
-            self.stdout.write(
-                self.style.ERROR(
-                    f"File {cliopatria_geojson_path} should have the suffix '_seshat_processed.geojson'"
-                )
-            )
-            self.stdout.write(
-                self.style.ERROR(
-                    f"Please run the cliopatria/convert_data.py script first"
-                )
             )
             return
 
