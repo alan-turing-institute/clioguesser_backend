@@ -1,2 +1,3 @@
 venv
 *.pyc
+clioguesser_backend/data

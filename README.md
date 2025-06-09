@@ -30,6 +30,11 @@ Back end repo for the Clioguesser historical geography game
      ```
    - **Windows**: Follow the instructions on the [GDAL website](https://gdal.org/download.html).
 
+5. Unzip the GeoJSON from the Cliopatria into the `clioguesser_backend/data` directory
+   ```
+   unzip cliopatria/cliopatria.geojson.zip -d clioguesser_backend/data
+   ```
+
 ## Usage
 1. Run the development server:
    ```
