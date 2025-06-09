@@ -3,7 +3,7 @@ import json
 from django.contrib.gis.geos import GEOSGeometry, MultiPolygon
 from django.core.management.base import BaseCommand
 from django.db import connection
-from clioguesser_backend.apps.core.models import Cliopatria
+from core.models import Cliopatria
 
 
 class Command(BaseCommand):
