@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 import sys
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -57,16 +58,27 @@ WSGI_APPLICATION = 'clioguesser_backend.wsgi.application'
 ASGI_APPLICATION = 'clioguesser_backend.asgi.application'
 
 # Database
+# if os.path.exists(local_env_path):
+env = environ.Env()
+environ.Env.read_env()
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',  # Use PostGIS for GIS support
-        'NAME': 'your_database_name',
-        'USER': 'your_database_user',
-        'PASSWORD': 'your_database_password',
-        'HOST': 'localhost',
-        'PORT': '5432',
+    "default": {
+        "ENGINE": "django.contrib.gis.db.backends.postgis",
+        "NAME": env("DB_NAME"),
+        "USER": env("DB_USER") or "postgres",
+        "HOST": env("DB_HOST"),
+        "PORT": env("DB_PORT"),
+        "PASSWORD": env("DB_PASSWORD"),
     }
 }
+
+# e.g. in a .env file:
+# DB_NAME=clioguesser
+# DB_HOST=localhost
+# DB_PORT=5432
+# DB_USER=postgres
+# DB_PASSWORD=<password>
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
