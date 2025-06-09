@@ -19,3 +19,4 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 # Install django-geojson
+RUN pip install "django-geojson[field]"
