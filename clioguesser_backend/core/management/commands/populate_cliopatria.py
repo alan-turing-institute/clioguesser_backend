@@ -4,6 +4,7 @@ from django.contrib.gis.geos import GEOSGeometry, MultiPolygon
 from django.core.management.base import BaseCommand
 from django.db import connection
 from core.models import Cliopatria
+import re
 
 
 class Command(BaseCommand):
@@ -46,9 +47,7 @@ class Command(BaseCommand):
             properties = feature["properties"]
 
             # Generate DisplayName for each shape based on the 'Name' field
-            properties["DisplayName"] = properties["Name"].replace(
-                "[()]", "", regex=True
-            )
+            properties["DisplayName"] = re.sub(r"[\[\]\(\)]", "", properties["Name"])
 
             # Ensure that polities where properties['MemberOf'] is not empty but the 'SeshatID' of the parent includes a ';' are ignored
             if properties["MemberOf"]:
