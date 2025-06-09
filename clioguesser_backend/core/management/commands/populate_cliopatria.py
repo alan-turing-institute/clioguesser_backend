@@ -90,8 +90,8 @@ class Command(BaseCommand):
                     area=properties["Area"],
                     start_year=properties["FromYear"],
                     end_year=properties["ToYear"],
-                    # polity_start_year=properties["PolityStartYear"],
-                    # polity_end_year=properties["PolityEndYear"],
+                    polity_start_year=properties["PolityStartYear"],
+                    polity_end_year=properties["PolityEndYear"],
                     components=properties["Components"],
                     member_of=properties["MemberOf"],
                 )

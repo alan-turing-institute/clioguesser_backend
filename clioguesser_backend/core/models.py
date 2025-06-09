@@ -15,8 +15,8 @@ class Cliopatria(models.Model):
     area = models.FloatField()
     start_year = models.IntegerField()
     end_year = models.IntegerField()
-    # polity_start_year = models.IntegerField()
-    # polity_end_year = models.IntegerField()
+    polity_start_year = models.IntegerField()
+    polity_end_year = models.IntegerField()
     components = models.CharField(max_length=500, null=True)
     member_of = models.CharField(max_length=500, null=True)
 
