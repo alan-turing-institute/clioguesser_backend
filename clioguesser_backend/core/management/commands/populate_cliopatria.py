@@ -46,7 +46,7 @@ class Command(BaseCommand):
             properties = feature["properties"]
 
             # Generate DisplayName for each shape based on the 'Name' field
-            properties["DisplayName"] = properties["Name"].str.replace(
+            properties["DisplayName"] = properties["Name"].replace(
                 "[()]", "", regex=True
             )
 
