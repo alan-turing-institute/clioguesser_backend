@@ -31,7 +31,7 @@ class Command(BaseCommand):
         )
         with open(cliopatria_geojson_path) as f:
             cliopatria_data = json.load(f)
-            gdf = gpd.read_file(f)
+        gdf = gpd.read_file(cliopatria_geojson_path)
         self.stdout.write(
             self.style.SUCCESS(
                 f"Successfully loaded Cliopatria shape dataset from {cliopatria_geojson_path}"
