@@ -1,4 +1,5 @@
 from django.contrib.gis.db.models.functions import AsGeoJSON
+from django.http import JsonResponse
 from .models import Cliopatria
 
 def get_polities_for_year(displayed_year):
@@ -37,3 +38,15 @@ def get_polities_for_year(displayed_year):
         "shapes": shapes
     }
     return content
+
+
+def polities_for_year_api(request):
+    year = request.GET.get("year")
+    if year is None:
+        return JsonResponse({"error": "Missing 'year' parameter"}, status=400)
+    try:
+        year = int(year)
+    except ValueError:
+        return JsonResponse({"error": "'year' must be an integer"}, status=400)
+    data = get_polities_for_year(year)
+    return JsonResponse(data)

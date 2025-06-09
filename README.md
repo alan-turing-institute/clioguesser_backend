@@ -48,6 +48,13 @@ Back end repo for the Clioguesser historical geography game
    ```
    - Note: check the data file has this name, or adjust the command accordingly.
 
+## API calls
+
+Get the polity data for a given year:
+```
+GET /api/polities/?year=2000
+```
+
 ## Django notes
 
 If you add a new model, you need to create a migration file:
