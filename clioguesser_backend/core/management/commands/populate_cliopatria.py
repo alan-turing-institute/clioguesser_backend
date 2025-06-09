@@ -100,7 +100,6 @@ class Command(BaseCommand):
                     end_year=properties["ToYear"],
                     polity_start_year=properties["PolityStartYear"],
                     polity_end_year=properties["PolityEndYear"],
-                    colour=properties["Color"],
                     components=properties["Components"],
                     member_of=properties["MemberOf"],
                 )
