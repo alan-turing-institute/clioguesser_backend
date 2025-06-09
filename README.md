@@ -19,6 +19,17 @@ Back end repo for the Clioguesser historical geography game
    pip install -r requirements.txt
    ```
 
+4. Install GDAL and GEOS for your operating system:
+   - **Ubuntu**: 
+     ```
+     sudo apt-get install gdal-bin libgdal-dev
+     ```
+   - **macOS**: 
+     ```
+     brew install gdal
+     ```
+   - **Windows**: Follow the instructions on the [GDAL website](https://gdal.org/download.html).
+
 ## Usage
 1. Run the development server:
    ```
