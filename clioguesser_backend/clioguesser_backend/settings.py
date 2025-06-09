@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -95,3 +96,20 @@ STATIC_URL = '/static/'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Geospatial stuff: modify the paths to the libraries for your system setup
+GEOGRAPHIC_DB = True
+"""GEOGRAPHIC_DB is set to True to enable the geographic database."""
+
+if sys.platform.startswith("darwin"):  # macOS
+    GDAL_LIBRARY_PATH = "/opt/homebrew/opt/gdal/lib/libgdal.dylib"
+    GEOS_LIBRARY_PATH = "/opt/homebrew/opt/geos/lib/libgeos_c.dylib"
+else:  # linux
+    if os.getenv("GITHUB_ACTIONS") == "true":
+        GDAL_LIBRARY_PATH = "/usr/lib/libgdal.so"
+        GEOS_LIBRARY_PATH = "/usr/lib/x86_64-linux-gnu/libgeos_c.so"
+    else:
+        GDAL_LIBRARY_PATH = "/usr/lib/libgdal.so.30"
+        # TODO: find a way to specify this based on the VM: aarch64 or x86_64
+        # GEOS_LIBRARY_PATH = '/usr/lib/aarch64-linux-gnu/libgeos_c.so'
+        GEOS_LIBRARY_PATH = "/usr/lib/x86_64-linux-gnu/libgeos_c.so"
