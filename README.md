@@ -67,3 +67,10 @@ Then apply the migration:
 ```
    python manage.py migrate
 ```
+
+## Docker
+
+You can run the docker container containing the backend by running:
+```
+   docker compose up -d
+```
