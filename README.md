@@ -34,6 +34,7 @@ Back end repo for the Clioguesser historical geography game
 
 If you add a new model, you need to create a migration file:
 ```
+   cd clioguesser_backend 
    python manage.py makemigrations
 ```
 
