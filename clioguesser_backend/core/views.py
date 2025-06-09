@@ -12,8 +12,13 @@ def get_polities_for_year(displayed_year):
     Returns:
         dict: The content for the polity shapes.
     """
+    # rows = Cliopatria.objects.filter(
+    #     polity_start_year__lte=displayed_year, polity_end_year__gte=displayed_year
+    # )
+
+    # We only want shapes that are active in the displayed year
     rows = Cliopatria.objects.filter(
-        polity_start_year__lte=displayed_year, polity_end_year__gte=displayed_year
+        start_year__lte=displayed_year, end_year__gte=displayed_year
     )
 
     # Convert 'geom' to GeoJSON in the database query
