@@ -22,6 +22,12 @@ class Command(BaseCommand):
                 self.style.ERROR(f"File {cliopatria_geojson_path} does not exist")
             )
             return
+        # Skip if already populated
+        if Cliopatria.objects.exists():
+            self.stdout.write(
+                self.style.WARNING("Cliopatria table already populated — skipping.")
+            )
+            return
 
         # Load the Cliopatria shape dataset with JSON
         self.stdout.write(
