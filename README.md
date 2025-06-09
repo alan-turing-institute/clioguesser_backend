@@ -29,3 +29,15 @@ Back end repo for the Clioguesser historical geography game
    ```
    python populate_cliopatria.py <path_to_geojson_file>
    ```
+
+## Django notes
+
+If you add a new model, you need to create a migration file:
+```
+   python manage.py makemigrations
+```
+
+Then apply the migration:
+```
+   python manage.py migrate
+```
