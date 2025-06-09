@@ -20,18 +20,18 @@ def get_polities_for_year(displayed_year):
     rows = rows.annotate(geom_json=AsGeoJSON("geom"))
     # Filter the rows to return
     rows = rows.values(
-        # "id",
+        "id",
         "seshat_id",  # Can use this for querying the Seshat database
         "name",
-        # "start_year",
-        # "end_year",
+        "start_year",
+        "end_year",
         "polity_start_year",
         "polity_end_year",
-        # "area",
+        "area",
         "geom_json",
-        # "components",
-        # "member_of",
-        # "wikipedia_name",
+        "components",
+        "member_of",
+        "wikipedia_name",
     )
     shapes = list(rows)
     content = {
