@@ -45,6 +45,11 @@ class Command(BaseCommand):
         for feature in cliopatria_data["features"]:
             properties = feature["properties"]
 
+            # Generate DisplayName for each shape based on the 'Name' field
+            properties["DisplayName"] = properties["Name"].str.replace(
+                "[()]", "", regex=True
+            )
+
             # Ensure that polities where properties['MemberOf'] is not empty but the 'SeshatID' of the parent includes a ';' are ignored
             if properties["MemberOf"]:
                 # Find the parent polity where "Name" is the same as the "MemberOf" value
