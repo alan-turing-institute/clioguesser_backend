@@ -12,7 +12,7 @@ SECRET_KEY = 'your-secret-key'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 
 # Application definition
 INSTALLED_APPS = [
@@ -24,12 +24,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.gis',  # Add this for GIS support
     'core',  # Your core app
+    'corsheaders',
 ]
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # Svelte dev server
+]
+CORS_ALLOW_CREDENTIALS = True
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
