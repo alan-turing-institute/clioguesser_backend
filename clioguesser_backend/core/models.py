@@ -22,3 +22,15 @@ class Cliopatria(models.Model):
 
     def __str__(self):
         return "Name: %s" % self.name
+    
+class Leaderboard(models.Model):
+    """
+    Model representing an arcade style leaderboard entry.
+    Each entry corresponds to a player's score and initials.
+    """
+
+    initials = models.CharField(max_length=3, unique=True, primary_key=True)
+    score = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.initials}: {self.score}"
