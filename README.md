@@ -4,7 +4,7 @@ Back end repo for the Clioguesser historical geography game
 ## Installation
 1. Clone the repository:
    ```
-   git clone <repository-url>
+   git clone --recurse-submodules <repository-url>
    cd clioguesser_backend
    ```
 
