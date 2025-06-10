@@ -14,7 +14,7 @@ services:
     networks:
       - clioguesser-net
 
-  frontend-api:
+  backend-api:
     build:
       context: ./
       dockerfile: Dockerfile
