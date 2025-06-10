@@ -36,7 +36,8 @@ services:
     networks:
       - clioguesser-net
     command: >
-      sh -c "python3 manage.py migrate &&
+      sh -c "sleep 2 &&
+             python3 manage.py migrate &&
              python3 manage.py populate_cliopatria data/cliopatria_polities_only.geojson &&
              python3 manage.py runserver 0.0.0.0:8000"
 
