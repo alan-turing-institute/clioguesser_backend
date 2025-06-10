@@ -125,3 +125,46 @@ def leaderboard_api(request):
     """
     data = get_leaderboard()
     return JsonResponse({"leaderboard": data})
+
+
+def calculate_score(min_year, max_year, true_year, guess_year):
+    """
+    Calculate the score based on the difference between the true year and the guessed year.
+    The score is calculated as the range of years (max_year - min_year) minus the absolute difference
+    between the true year and the guessed year, multiplied by 365 (to convert to days).
+    If the guessed year is outside the range, throw an error.
+
+    Args:
+        min_year (int): The minimum year of the range of years in the game.
+        max_year (int): The maximum year of the range of years in the game.
+        true_year (int): The year displayed in the game, which is the correct answer.
+        guess_year (int): The guessed year by the player.
+    Returns:
+        int: The calculated score.
+    """
+    if guess_year < min_year or guess_year > max_year:
+        raise ValueError("Guessed year is outside the valid range.")
+
+    score = ((max_year - min_year) * 365) - (abs(true_year - guess_year) * 365)
+    return score
+
+
+def get_score_api(request):
+    """
+    API endpoint to calculate the score based on the provided parameters.
+    Expects 'min_year', 'max_year', 'true_year', and 'guess_year' as GET parameters.
+
+    Returns:
+        JsonResponse: A response containing the calculated score or an error message.
+    """
+    try:
+        min_year = int(request.GET.get("min_year", 0))
+        max_year = int(request.GET.get("max_year", 0))
+        true_year = int(request.GET.get("true_year", 0))
+        guess_year = int(request.GET.get("guess_year", 0))
+
+        score = calculate_score(min_year, max_year, true_year, guess_year)
+        return JsonResponse({"score": score})
+
+    except ValueError as e:
+        return JsonResponse({"error": str(e)}, status=400)

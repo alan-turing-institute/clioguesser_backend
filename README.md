@@ -84,6 +84,18 @@ Test with curl:
 curl -X POST -d "initials=EJC&score=1234" http://127.0.0.1:8000/api/leaderboard/update/
 ```
 
+### Calculate a score
+
+Calculate a score based on year range, true year, and guess:
+```
+GET /api/score/?min_year=1000&max_year=2000&true_year=1500&guess_year=1400
+```
+
+Test with curl:
+```
+curl -X GET "http://localhost:8000/api/score/?min_year=1000&max_year=2000&true_year=1500&guess_year=1400"
+```
+
 ## Django notes
 
 If you add a new model, you need to create a migration file:
