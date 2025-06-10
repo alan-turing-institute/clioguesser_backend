@@ -8,7 +8,7 @@ Back end repo for the Clioguesser historical geography game
    cd clioguesser_backend
    ```
 
-2. Create a virtual environment:
+<!-- 2. Create a virtual environment:
    ```
    python -m venv venv
    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
@@ -46,7 +46,14 @@ Back end repo for the Clioguesser historical geography game
    cd clioguesser_backend
    python manage.py populate_cliopatria data/cliopatria_polities_only.geojson
    ```
-   - Note: check the data file has this name, or adjust the command accordingly.
+   - Note: check the data file has this name, or adjust the command accordingly. -->
+
+## Docker
+
+You can run the docker container containing the backend by running:
+```
+   docker compose up -d
+```
 
 ## API calls
 
@@ -107,11 +114,4 @@ If you add a new model, you need to create a migration file:
 Then apply the migration:
 ```
    python manage.py migrate
-```
-
-## Docker
-
-You can run the docker container containing the backend by running:
-```
-   docker compose up -d
 ```
