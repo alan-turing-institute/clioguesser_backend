@@ -1,4 +1,3 @@
 venv
 *.pyc
 clioguesser_backend/data
-*.env
