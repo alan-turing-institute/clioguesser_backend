@@ -1,6 +1,6 @@
 services:
   postgis-db:
-    image: imresamu/postgis-arm64
+    image: postgis/postgis
     container_name: clioguesser-db
     restart: unless-stopped
     environment:
@@ -47,3 +47,4 @@ networks:
   clioguesser-net:
     name: clioguesser-net
     driver: bridge
+    external: true
