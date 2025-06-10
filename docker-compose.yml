@@ -45,3 +45,5 @@ volumes:
 
 networks:
   clioguesser-net:
+    name: clioguesser-net
+    driver: bridge
