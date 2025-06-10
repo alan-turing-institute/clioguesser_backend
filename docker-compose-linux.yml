@@ -2,7 +2,6 @@ services:
   postgis-db:
     image: postgis/postgis
     container_name: clioguesser-db
-    restart: unless-stopped
     environment:
       POSTGRES_DB: clioguesser
       POSTGRES_USER: postgres
@@ -30,7 +29,9 @@ services:
     env_file:
       - ./.env
     volumes:
-      - ./clioguesser_backend:/app/clioguesser_backend
+      - ./clioguesser_backend/clioguesser_backend:/app/clioguesser_backend/clioguesser_backend
+      - ./clioguesser_backend/manage.py:/app/clioguesser_backend/manage.py
+      - ./clioguesser_backend/core:/app/clioguesser_backend/core
     depends_on:
       - postgis-db
     networks:
