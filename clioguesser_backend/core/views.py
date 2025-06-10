@@ -40,10 +40,36 @@ def get_polities_for_year(displayed_year):
         "wikipedia_name",
     )
     shapes = list(rows)
+    shapes = get_colours(shapes)
     content = {
         "shapes": shapes
     }
     return content
+
+
+def get_colours(shapes):
+    """
+    Update the shapes with colours.
+
+    Args:
+        shapes (list): A list of shape dictionaries.
+
+    Returns:
+        list: The list of shapes with added colour information.
+    """
+    colours = [
+        "#008000",
+        "#40E0D0",
+        "#FF0000",
+        "#FFFF00",
+        "#A52A2A",
+        "#FFA500"
+    ]
+    # Assign equal numbers of each colour to the shapes
+    for i, shape in enumerate(shapes):
+        # Pick the colour based on the index
+        shape["colour"] = colours[i % len(colours)]
+    return shapes
 
 
 def polities_for_year_api(request):
