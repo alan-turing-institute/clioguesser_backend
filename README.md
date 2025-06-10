@@ -50,15 +50,26 @@ Back end repo for the Clioguesser historical geography game
 
 ## API calls
 
-Get the polity data for a given year:
+### Get the polity data for a given year:
 ```
 GET /api/polities/?year=2000
 ```
 
-Get the current leaderboard:
+Test with curl:
+```
+curl -X GET "http://localhost:8000/api/polities/?year=2000"
+```
+
+### Get the current leaderboard:
 ```
 GET /api/leaderboard/
 ```
+
+Test with curl:
+```
+curl -X GET "http://localhost:8000/api/leaderboard/"
+```
+### Update the leaderboard
 
 Update the leaderboard with a new score:
 ```
@@ -66,6 +77,11 @@ POST /api/leaderboard/update/
 Content-Type: application/x-www-form-urlencoded
 
 initials=ABC&score=1234
+```
+
+Test with curl:
+```
+curl -X POST -d "initials=EJC&score=1234" http://127.0.0.1:8000/api/leaderboard/update/
 ```
 
 ## Django notes
