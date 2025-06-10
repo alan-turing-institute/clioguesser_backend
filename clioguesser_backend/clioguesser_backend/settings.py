@@ -120,18 +120,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 GEOGRAPHIC_DB = True
 """GEOGRAPHIC_DB is set to True to enable the geographic database."""
 
-if sys.platform.startswith("darwin"):  # macOS
-    GDAL_LIBRARY_PATH = "/opt/homebrew/opt/gdal/lib/libgdal.dylib"
-    GEOS_LIBRARY_PATH = "/opt/homebrew/opt/geos/lib/libgeos_c.dylib"
-else:  # linux
-    if os.getenv("GITHUB_ACTIONS") == "true":
-        GDAL_LIBRARY_PATH = "/usr/lib/libgdal.so"
-        GEOS_LIBRARY_PATH = "/usr/lib/x86_64-linux-gnu/libgeos_c.so"
-    else:
-        GDAL_LIBRARY_PATH = "/usr/lib/libgdal.so.30"
-        # TODO: find a way to specify this based on the VM: aarch64 or x86_64
-        if sys.platform == "linux":
-            GEOS_LIBRARY_PATH = "/usr/lib/x86_64-linux-gnu/libgeos_c.so"
-        else:
-            GEOS_LIBRARY_PATH = '/usr/lib/aarch64-linux-gnu/libgeos_c.so'
-        
+GDAL_LIBRARY_PATH = "/usr/lib/libgdal.so.30"
+# TODO: find a way to specify this based on the VM: aarch64 or x86_64
+if sys.platform == "linux":
+    GEOS_LIBRARY_PATH = "/usr/lib/x86_64-linux-gnu/libgeos_c.so"
+else:
+    GEOS_LIBRARY_PATH = '/usr/lib/aarch64-linux-gnu/libgeos_c.so'
