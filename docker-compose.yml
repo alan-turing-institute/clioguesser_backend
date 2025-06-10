@@ -30,7 +30,9 @@ services:
     env_file:
       - ./.env
     volumes:
-      - ./clioguesser_backend:/app/clioguesser_backend
+      - ./clioguesser_backend/clioguesser_backend:/app/clioguesser_backend/clioguesser_backend
+      - ./clioguesser_backend/manage.py:/app/clioguesser_backend/manage.py
+      - ./clioguesser_backend/core:/app/clioguesser_backend/core
     depends_on:
       - postgis-db
     networks:
