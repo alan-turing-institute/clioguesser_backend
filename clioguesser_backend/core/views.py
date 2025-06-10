@@ -1,5 +1,6 @@
 from django.contrib.gis.db.models.functions import AsGeoJSON
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from .models import Cliopatria
 
 def get_polities_for_year(displayed_year):
@@ -55,3 +56,72 @@ def polities_for_year_api(request):
         return JsonResponse({"error": "'year' must be an integer"}, status=400)
     data = get_polities_for_year(year)
     return JsonResponse(data)
+
+
+def update_leaderboard(initials, score):
+    """
+    Update the leaderboard with a new score for the given initials.
+    If the initials already exist, update the score if the new score is higher.
+    If not, create a new entry.
+
+    Args:
+        initials (str): The player's initials.
+        score (int): The player's score.
+    """
+    from .models import Leaderboard
+
+    leaderboard_entry, created = Leaderboard.objects.get_or_create(initials=initials)
+    if created or leaderboard_entry.score < score:
+        leaderboard_entry.score = score
+        leaderboard_entry.save()
+
+
+@csrf_exempt
+def update_leaderboard_api(request):
+    """
+    API endpoint to update the leaderboard with a new score.
+    Expects 'initials' and 'score' as POST parameters.
+
+    Returns:
+        JsonResponse: A response indicating success or failure.
+    """
+    if request.method == "POST":
+        initials = request.POST.get("initials")
+        score = request.POST.get("score")
+
+        if not initials or not score:
+            return JsonResponse({"error": "Missing 'initials' or 'score' parameter"}, status=400)
+
+        try:
+            score = int(score)
+        except ValueError:
+            return JsonResponse({"error": "'score' must be an integer"}, status=400)
+
+        update_leaderboard(initials, score)
+        return JsonResponse({"message": "Leaderboard updated successfully"})
+
+    return JsonResponse({"error": "Invalid request method"}, status=405)
+
+
+def get_leaderboard():
+    """
+    Retrieve the current leaderboard entries, sorted by score in descending order.
+
+    Returns:
+        list: A list of dictionaries containing initials and scores.
+    """
+    from .models import Leaderboard
+
+    leaderboard_entries = Leaderboard.objects.all().order_by("-score")
+    return [{"initials": entry.initials, "score": entry.score} for entry in leaderboard_entries]
+
+
+def leaderboard_api(request):
+    """
+    API endpoint to retrieve the leaderboard.
+
+    Returns:
+        JsonResponse: A response containing the leaderboard entries.
+    """
+    data = get_leaderboard()
+    return JsonResponse({"leaderboard": data})

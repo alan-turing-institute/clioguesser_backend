@@ -55,6 +55,19 @@ Get the polity data for a given year:
 GET /api/polities/?year=2000
 ```
 
+Get the current leaderboard:
+```
+GET /api/leaderboard/
+```
+
+Update the leaderboard with a new score:
+```
+POST /api/leaderboard/update/
+Content-Type: application/x-www-form-urlencoded
+
+initials=ABC&score=1234
+```
+
 ## Django notes
 
 If you add a new model, you need to create a migration file:
