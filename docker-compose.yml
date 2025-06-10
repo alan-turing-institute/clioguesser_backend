@@ -1,6 +1,6 @@
 services:
   postgis-db:
-    image: postgis/postgis:15-3.3
+    image: imresamu/postgis-arm64
     container_name: clioguesser-db
     restart: unless-stopped
     environment:
