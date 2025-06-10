@@ -130,5 +130,8 @@ else:  # linux
     else:
         GDAL_LIBRARY_PATH = "/usr/lib/libgdal.so.30"
         # TODO: find a way to specify this based on the VM: aarch64 or x86_64
-        # GEOS_LIBRARY_PATH = '/usr/lib/aarch64-linux-gnu/libgeos_c.so'
-        GEOS_LIBRARY_PATH = "/usr/lib/x86_64-linux-gnu/libgeos_c.so"
+        if sys.platform == "linux":
+            GEOS_LIBRARY_PATH = "/usr/lib/x86_64-linux-gnu/libgeos_c.so"
+        else:
+            GEOS_LIBRARY_PATH = '/usr/lib/aarch64-linux-gnu/libgeos_c.so'
+        
