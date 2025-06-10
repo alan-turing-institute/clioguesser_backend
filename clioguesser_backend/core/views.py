@@ -2,6 +2,8 @@ from django.contrib.gis.db.models.functions import AsGeoJSON
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Cliopatria
+from shapely.geometry import shape as shapely_shape
+import json
 
 def get_polities_for_year(displayed_year):
     """
@@ -49,7 +51,8 @@ def get_polities_for_year(displayed_year):
 
 def get_colours(shapes):
     """
-    Update the shapes with colours.
+    Assign colours to shapes so that no two adjacent polygons share the same colour.
+    If the number of colours is insufficient, add more.
 
     Args:
         shapes (list): A list of shape dictionaries.
@@ -57,18 +60,56 @@ def get_colours(shapes):
     Returns:
         list: The list of shapes with added colour information.
     """
-    colours = [
-        "#008000",
-        "#40E0D0",
-        "#FF0000",
-        "#FFFF00",
-        "#A52A2A",
-        "#FFA500"
+    base_colours = [
+        "#008000",  # green
+        "#40E0D0",  # turquoise
+        "#FF0000",  # red
+        "#FFFF00",  # yellow
+        "#A52A2A",  # brown
+        "#FFA500"   # orange
     ]
-    # Assign equal numbers of each colour to the shapes
+    # Convert GeoJSON to Shapely geometries
+    geometries = [shapely_shape(json.loads(s["geom_json"])) for s in shapes]
+
+    # Build adjacency list
+    adjacency = [[] for _ in shapes]
+    for i, geom1 in enumerate(geometries):
+        for j in range(i + 1, len(geometries)):
+            geom2 = geometries[j]
+            if geom1.touches(geom2) or geom1.intersects(geom2):
+                adjacency[i].append(j)
+                adjacency[j].append(i)
+
+    # Greedy colouring
+    colours = base_colours.copy()
+    assigned_colours = [None] * len(shapes)
+    for i, neighbors in enumerate(adjacency):
+        # Find used colours among neighbors
+        used = set(assigned_colours[n] for n in neighbors if assigned_colours[n] is not None)
+        # Find the first available colour
+        for c in colours:
+            if c not in used:
+                assigned_colours[i] = c
+                break
+        else:
+            # If all colours are used, add a new random colour
+            import random
+            import colorsys
+            # Generate a new random colour
+            while True:
+                h = random.random()
+                s = 0.7 + 0.3 * random.random()
+                v = 0.7 + 0.3 * random.random()
+                rgb = colorsys.hsv_to_rgb(h, s, v)
+                hex_colour = '#%02x%02x%02x' % (int(rgb[0]*255), int(rgb[1]*255), int(rgb[2]*255))
+                if hex_colour not in colours:
+                    colours.append(hex_colour)
+                    assigned_colours[i] = hex_colour
+                    break
+
+    # Assign colours to shapes
     for i, shape in enumerate(shapes):
-        # Pick the colour based on the index
-        shape["colour"] = colours[i % len(colours)]
+        shape["colour"] = assigned_colours[i]
     return shapes
 
 
