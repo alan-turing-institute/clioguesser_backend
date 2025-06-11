@@ -88,7 +88,7 @@ initials=ABC&score=1234
 
 Test with curl:
 ```
-curl -X POST -d "initials=EJC&score=1234" http://127.0.0.1:8000/api/leaderboard/update/
+curl -X POST -d "initials=ABC&score=123" http://localhost:8000/api/leaderboard/update/
 ```
 
 ### Calculate a score
