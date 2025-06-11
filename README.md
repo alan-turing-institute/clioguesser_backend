@@ -95,12 +95,12 @@ curl -X POST -d "initials=ABC&score=123" http://localhost:8000/api/leaderboard/u
 
 Calculate a score based on year range, true year, and guess:
 ```
-GET /api/score/?min_year=1000&max_year=2000&true_year=1500&guess_year=1400
+GET /api/score/?min_year=1000&max_year=2000&true_year=1500&guess_year=1400&multiplier=365
 ```
 
 Test with curl:
 ```
-curl -X GET "http://localhost:8000/api/score/?min_year=1000&max_year=2000&true_year=1500&guess_year=1400"
+curl -X GET "http://localhost:8000/api/score/?min_year=1000&max_year=2000&true_year=1500&guess_year=1400&multiplier=365"
 ```
 
 ## Django notes
