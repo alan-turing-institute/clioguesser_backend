@@ -41,6 +41,8 @@ def get_polities_for_year(displayed_year):
         "member_of",
         "wikipedia_name",
     )
+    # Omit any rows where the "member_of" field is not empty or a blank string.
+    rows = [row for row in rows if not row["member_of"]]
     shapes = list(rows)
     shapes = get_colours(shapes)
     content = {
