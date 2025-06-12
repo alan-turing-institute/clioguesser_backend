@@ -12,7 +12,7 @@ SECRET_KEY = 'your-secret-key'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 INSTALLED_APPS = [

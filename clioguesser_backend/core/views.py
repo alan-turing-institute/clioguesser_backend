@@ -1,9 +1,12 @@
 from django.contrib.gis.db.models.functions import AsGeoJSON
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.http import StreamingHttpResponse
 from .models import Cliopatria
 from shapely.geometry import shape as shapely_shape
 import json
+import time
+
 
 def get_polities_for_year(displayed_year):
     """
@@ -45,9 +48,7 @@ def get_polities_for_year(displayed_year):
     rows = [row for row in rows if not row["member_of"]]
     shapes = list(rows)
     shapes = get_colours(shapes)
-    content = {
-        "shapes": shapes
-    }
+    content = {"shapes": shapes}
     return content
 
 
@@ -68,7 +69,7 @@ def get_colours(shapes):
         "#FF0000",  # red
         "#FFFF00",  # yellow
         "#A52A2A",  # brown
-        "#FFA500"   # orange
+        "#FFA500",  # orange
     ]
     # Convert GeoJSON to Shapely geometries
     geometries = [shapely_shape(json.loads(s["geom_json"])) for s in shapes]
@@ -87,7 +88,9 @@ def get_colours(shapes):
     assigned_colours = [None] * len(shapes)
     for i, neighbors in enumerate(adjacency):
         # Find used colours among neighbors
-        used = set(assigned_colours[n] for n in neighbors if assigned_colours[n] is not None)
+        used = set(
+            assigned_colours[n] for n in neighbors if assigned_colours[n] is not None
+        )
         # Find the first available colour
         for c in colours:
             if c not in used:
@@ -97,13 +100,18 @@ def get_colours(shapes):
             # If all colours are used, add a new random colour
             import random
             import colorsys
+
             # Generate a new random colour
             while True:
                 h = random.random()
                 s = 0.7 + 0.3 * random.random()
                 v = 0.7 + 0.3 * random.random()
                 rgb = colorsys.hsv_to_rgb(h, s, v)
-                hex_colour = '#%02x%02x%02x' % (int(rgb[0]*255), int(rgb[1]*255), int(rgb[2]*255))
+                hex_colour = "#%02x%02x%02x" % (
+                    int(rgb[0] * 255),
+                    int(rgb[1] * 255),
+                    int(rgb[2] * 255),
+                )
                 if hex_colour not in colours:
                     colours.append(hex_colour)
                     assigned_colours[i] = hex_colour
@@ -159,7 +167,9 @@ def update_leaderboard_api(request):
         score = request.POST.get("score")
 
         if not initials or not score:
-            return JsonResponse({"error": "Missing 'initials' or 'score' parameter"}, status=400)
+            return JsonResponse(
+                {"error": "Missing 'initials' or 'score' parameter"}, status=400
+            )
 
         try:
             score = int(score)
@@ -182,7 +192,10 @@ def get_leaderboard():
     from .models import Leaderboard
 
     leaderboard_entries = Leaderboard.objects.all().order_by("-score")
-    return [{"initials": entry.initials, "score": entry.score} for entry in leaderboard_entries]
+    return [
+        {"initials": entry.initials, "score": entry.score}
+        for entry in leaderboard_entries
+    ]
 
 
 def leaderboard_api(request):
@@ -241,3 +254,27 @@ def get_score_api(request):
 
     except ValueError as e:
         return JsonResponse({"error": str(e)}, status=400)
+
+
+def leaderboard_event_stream():
+    """
+    Generator that yields the leaderboard as a server-sent event every 1 second.
+    """
+    while True:
+        data = get_leaderboard()
+        json_data = json.dumps(data)
+        yield f"data: {json_data}\n\n"
+        time.sleep(1)
+
+
+@csrf_exempt
+def leaderboard_stream_api(request):
+    """
+    SSE endpoint that continuously streams leaderboard data.
+    """
+    response = StreamingHttpResponse(
+        leaderboard_event_stream(), content_type="text/event-stream"
+    )
+    response["Cache-Control"] = "no-cache"
+    response["X-Accel-Buffering"] = "no"  # For nginx, ensures unbuffered streaming
+    return response
