@@ -258,13 +258,13 @@ def get_score_api(request):
 
 def leaderboard_event_stream():
     """
-    Generator that yields the leaderboard as a server-sent event every 2 seconds.
+    Generator that yields the leaderboard as a server-sent event every 1 second.
     """
     while True:
         data = get_leaderboard()
         json_data = json.dumps(data)
         yield f"data: {json_data}\n\n"
-        time.sleep(2)
+        time.sleep(1)
 
 
 @csrf_exempt
