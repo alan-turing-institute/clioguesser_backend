@@ -28,7 +28,10 @@ INSTALLED_APPS = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # Svelte dev server
+    os.environ.get(
+        "CORS_ALLOWED_ORIGINS",
+        "http://localhost:8000"  # Svelte dev server
+    ),
 ]
 CORS_ALLOW_CREDENTIALS = True
 
