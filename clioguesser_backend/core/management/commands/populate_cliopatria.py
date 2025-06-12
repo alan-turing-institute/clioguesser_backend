@@ -18,10 +18,7 @@ class Command(BaseCommand):
         # Ensure the file exists
         cliopatria_geojson_path = options["geojson_file"]
         if not os.path.exists(cliopatria_geojson_path):
-            self.stdout.write(
-                self.style.ERROR(f"File {cliopatria_geojson_path} does not exist")
-            )
-            return
+            raise RuntimeError(f"File {cliopatria_geojson_path} does not exist")
         # Skip if already populated
         if Cliopatria.objects.exists():
             self.stdout.write(
