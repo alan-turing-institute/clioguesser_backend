@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 
 import environ
@@ -6,13 +5,15 @@ import environ
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = environ.Env()
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "your-secret-key"
+SECRET_KEY = env("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [x.strip() for x in env("DJANGO_ALLOWED_HOSTS").split(",")]
 
 # Application definition
 INSTALLED_APPS = [
@@ -27,9 +28,8 @@ INSTALLED_APPS = [
     "corsheaders",
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # Svelte dev server
-]
+CORS_ALLOWED_ORIGINS = [x.strip() for x in env("CORS_ALLOWED_ORIGINS").split(",")]
+
 CORS_ALLOW_CREDENTIALS = True
 
 MIDDLEWARE = [
@@ -64,28 +64,16 @@ TEMPLATES = [
 WSGI_APPLICATION = "clioguesser_backend.wsgi.application"
 ASGI_APPLICATION = "clioguesser_backend.asgi.application"
 
-# Database
-# if os.path.exists(local_env_path):
-env = environ.Env()
-environ.Env.read_env()
-
 DATABASES = {
     "default": {
         "ENGINE": "django.contrib.gis.db.backends.postgis",
         "NAME": env("DB_NAME"),
-        "USER": env("DB_USER") or "postgres",
+        "USER": env("DB_USER"),
         "HOST": env("DB_HOST"),
         "PORT": env("DB_PORT"),
         "PASSWORD": env("DB_PASSWORD"),
     }
 }
-
-# e.g. in a .env file:
-# DB_NAME=clioguesser
-# DB_HOST=localhost
-# DB_PORT=5432
-# DB_USER=postgres
-# DB_PASSWORD=<password>
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -118,11 +106,3 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Geospatial stuff: modify the paths to the libraries for your system setup
 GEOGRAPHIC_DB = True
-"""GEOGRAPHIC_DB is set to True to enable the geographic database."""
-
-# GDAL_LIBRARY_PATH = "/usr/lib/libgdal.so.30"
-#
-# if os.uname().machine == "aarch64":
-#     GEOS_LIBRARY_PATH = "/usr/lib/aarch64-linux-gnu/libgeos_c.so"
-# else:
-#     GEOS_LIBRARY_PATH = "/usr/lib/x86_64-linux-gnu/libgeos_c.so"
