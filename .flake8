@@ -1,0 +1,3 @@
+[flake8]
+# Ignore line length errors
+extend-ignore = E501

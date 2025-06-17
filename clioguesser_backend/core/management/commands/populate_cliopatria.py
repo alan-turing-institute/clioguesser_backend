@@ -1,11 +1,11 @@
-import os
 import json
+import os
+import re
+
+import geopandas as gpd
+from core.models import Cliopatria
 from django.contrib.gis.geos import GEOSGeometry, MultiPolygon
 from django.core.management.base import BaseCommand
-from django.db import connection
-from core.models import Cliopatria
-import re
-import geopandas as gpd
 
 
 class Command(BaseCommand):
@@ -46,13 +46,15 @@ class Command(BaseCommand):
         Cliopatria.objects.all().delete()
         self.stdout.write(self.style.SUCCESS("Cliopatria table cleared"))
 
-        self.stdout.write(self.style.SUCCESS("Determining polity start and end years..."))
+        self.stdout.write(
+            self.style.SUCCESS("Determining polity start and end years...")
+        )
 
         # Add a column called 'PolityStartYear' to the GeoDataFrame which is the minimum 'FromYear' of all shapes with the same 'Name'
-        gdf['PolityStartYear'] = gdf.groupby('Name')['FromYear'].transform('min')
+        gdf["PolityStartYear"] = gdf.groupby("Name")["FromYear"].transform("min")
 
         # Add a column called 'PolityEndYear' to the GeoDataFrame which is the maximum 'ToYear' of all shapes with the same 'Name'
-        gdf['PolityEndYear'] = gdf.groupby('Name')['ToYear'].transform('max')
+        gdf["PolityEndYear"] = gdf.groupby("Name")["ToYear"].transform("max")
 
         self.stdout.write(self.style.SUCCESS("Determined polity start and end years."))
 
@@ -60,8 +62,12 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS("Adding data to the database..."))
         for feature in cliopatria_data["features"]:
             properties = feature["properties"]
-            properties['PolityStartYear'] = gdf.loc[gdf['Name'] == properties['Name'], 'PolityStartYear'].values[0]
-            properties['PolityEndYear'] = gdf.loc[gdf['Name'] == properties['Name'], 'PolityEndYear'].values[0]
+            properties["PolityStartYear"] = gdf.loc[
+                gdf["Name"] == properties["Name"], "PolityStartYear"
+            ].values[0]
+            properties["PolityEndYear"] = gdf.loc[
+                gdf["Name"] == properties["Name"], "PolityEndYear"
+            ].values[0]
 
             # Generate DisplayName for each shape based on the 'Name' field
             properties["DisplayName"] = re.sub(r"[\[\]\(\)]", "", properties["Name"])
@@ -118,4 +124,3 @@ class Command(BaseCommand):
                 f"Successfully imported all data from {cliopatria_geojson_path}"
             )
         )
-

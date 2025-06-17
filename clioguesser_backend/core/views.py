@@ -1,11 +1,12 @@
-from django.contrib.gis.db.models.functions import AsGeoJSON
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.http import StreamingHttpResponse
-from .models import Cliopatria
-from shapely.geometry import shape as shapely_shape
 import json
 import time
+
+from django.contrib.gis.db.models.functions import AsGeoJSON
+from django.http import JsonResponse, StreamingHttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from shapely.geometry import shape as shapely_shape
+
+from .models import Cliopatria
 
 
 def get_polities_for_year(displayed_year):
@@ -98,8 +99,8 @@ def get_colours(shapes):
                 break
         else:
             # If all colours are used, add a new random colour
-            import random
             import colorsys
+            import random
 
             # Generate a new random colour
             while True:

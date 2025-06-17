@@ -6,16 +6,16 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0002_remove_cliopatria_colour'),
+        ("core", "0002_remove_cliopatria_colour"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='cliopatria',
-            name='polity_end_year',
+            model_name="cliopatria",
+            name="polity_end_year",
         ),
         migrations.RemoveField(
-            model_name='cliopatria',
-            name='polity_start_year',
+            model_name="cliopatria",
+            name="polity_start_year",
         ),
     ]

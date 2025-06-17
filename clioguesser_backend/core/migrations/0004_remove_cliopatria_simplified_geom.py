@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0003_remove_cliopatria_polity_end_year_and_more'),
+        ("core", "0003_remove_cliopatria_polity_end_year_and_more"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='cliopatria',
-            name='simplified_geom',
+            model_name="cliopatria",
+            name="simplified_geom",
         ),
     ]

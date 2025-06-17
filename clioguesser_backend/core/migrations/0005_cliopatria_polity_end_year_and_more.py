@@ -6,19 +6,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0004_remove_cliopatria_simplified_geom'),
+        ("core", "0004_remove_cliopatria_simplified_geom"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='cliopatria',
-            name='polity_end_year',
+            model_name="cliopatria",
+            name="polity_end_year",
             field=models.IntegerField(default=1000),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='cliopatria',
-            name='polity_start_year',
+            model_name="cliopatria",
+            name="polity_start_year",
             field=models.IntegerField(default=1000),
             preserve_default=False,
         ),
