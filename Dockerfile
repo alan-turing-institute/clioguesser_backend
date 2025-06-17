@@ -1,19 +1,5 @@
 FROM python:3.12-alpine
 
-# Declare build-time arguments
-ARG DB_NAME
-ARG DB_USER
-ARG DB_PASSWORD
-ARG DB_HOST
-ARG DB_PORT
-
-# Export them to ENV for manage.py to see them
-ENV DB_NAME=${DB_NAME}
-ENV DB_USER=${DB_USER}
-ENV DB_PASSWORD=${DB_PASSWORD}
-ENV DB_HOST=${DB_HOST}
-ENV DB_PORT=${DB_PORT}
-
 # Update the package lists for upgrades for packages that need upgrading, as well as new packages that have just come to the repositories.
 RUN apk update
 
