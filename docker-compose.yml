@@ -16,12 +16,6 @@ services:
       context: ./
       dockerfile: Dockerfile
       args:
-#        DB_NAME:
-#        DB_NAME: clioguesser
-#        DB_USER: postgres
-#        DB_PASSWORD: postgres
-#        DB_HOST: localhost
-#        DB_PORT: 5432
     container_name: clioguesser-backend
     ports:
       - "8000:8000"

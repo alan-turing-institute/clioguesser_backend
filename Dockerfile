@@ -24,7 +24,7 @@ COPY clioguesser_backend/ ./clioguesser_backend/
 # Install Python dependencies
 RUN pip install -r requirements.txt
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app/clioguesser_backend
