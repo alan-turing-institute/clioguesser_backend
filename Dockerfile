@@ -10,10 +10,11 @@ RUN apk add --no-cache \
     gcc \
     musl-dev \
     libpq-dev \
-    geos-dev
+    geos-dev \
+    libspatialite-dev
 
 # Upgrade pip
-RUN python3 -m pip install --upgrade pip
+RUN pip install --upgrade pip
 
 WORKDIR /app
 

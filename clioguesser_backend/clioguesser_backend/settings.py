@@ -8,12 +8,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# You may want to create with $(openssl rand -hex 32)
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = [x.strip() for x in env("DJANGO_ALLOWED_HOSTS").split(",")]
+ALLOWED_HOSTS = [x.strip() for x in env("DJANGO_ALLOWED_HOSTS", default="*").split(",")]
 
 # Application definition
 INSTALLED_APPS = [
@@ -28,7 +29,7 @@ INSTALLED_APPS = [
     "corsheaders",
 ]
 
-CORS_ALLOWED_ORIGINS = [x.strip() for x in env("CORS_ALLOWED_ORIGINS").split(",")]
+CORS_ALLOWED_ORIGINS = [x.strip() for x in env("CORS_ALLOWED_ORIGINS", default="http://localhost:5173").split(",")]
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -66,12 +67,10 @@ ASGI_APPLICATION = "clioguesser_backend.asgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.contrib.gis.db.backends.postgis",
-        "NAME": env("DB_NAME"),
-        "USER": env("DB_USER"),
-        "HOST": env("DB_HOST"),
-        "PORT": env("DB_PORT"),
-        "PASSWORD": env("DB_PASSWORD"),
+        "ENGINE": "django.contrib.gis.db.backends.spatialite",
+        # Path to your SQLite database file.
+        # Will be created if it doesn't exist.
+        "NAME": env("DB_NAME", cast=Path),
     }
 }
 
