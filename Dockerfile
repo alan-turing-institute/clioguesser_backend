@@ -31,11 +31,11 @@ RUN python3 -m pip install --upgrade pip
 
 WORKDIR /app
 
-COPY requirements-alpine.txt .
+COPY requirements.txt .
 COPY clioguesser_backend/ ./clioguesser_backend/
 
 # Install Python dependencies
-RUN pip install -r requirements-alpine.txt
+RUN pip install -r requirements.txt
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
