@@ -1,11 +1,11 @@
-import signal
-import sys
 import os
-import threading
+import signal
 import time
 from pathlib import Path
+
 from azure.identity import DefaultAzureCredential
 from azure.storage.blob import BlobClient
+
 
 def get_handle_sigterm(download_path, db_account_url, container_name, blob_name):
 
@@ -17,14 +17,13 @@ def get_handle_sigterm(download_path, db_account_url, container_name, blob_name)
             account_url=db_account_url,
             container_name=container_name,
             blob_name=blob_name,
-            credential=credential
+            credential=credential,
         )
         local_db_path = download_path / blob_name
         print(f"Uploading {local_db_path} to Azure Blob Storage...")
         with local_db_path.open("rb") as data:
             blob_client.upload_blob(data, overwrite=True)
         print("Upload complete.")
-
 
     def handle_sigterm(signal_number, frame):
         print("SIGTERM received: shutting down gracefully...")
@@ -36,7 +35,6 @@ def get_handle_sigterm(download_path, db_account_url, container_name, blob_name)
 
         # push_blob()
 
-
     return handle_sigterm
 
 
@@ -46,15 +44,21 @@ def register_shutdown_hook():
 
         # split /path/to/sqlite.db into the filename and the rest.
         db_name = Path(os.getenv("DB_NAME"))
-        blob_name = db_name.stem
+        blob_name = db_name.parts[-1]
         download_path = db_name.parents[0]
 
         # download_blob_to_file(download_path, db_account_url, container_name, blob_name)
 
         print("Registering shutdown hook for SIGTERM...")
-        signal.signal(signal.SIGTERM, get_handle_sigterm(download_path, db_account_url, container_name, blob_name))
+        signal.signal(
+            signal.SIGTERM,
+            get_handle_sigterm(
+                download_path, db_account_url, container_name, blob_name
+            ),
+        )
     else:
         print("No DB_ACCOUNT_URL found, skipping shutdown hook registration.")
+
 
 def download_blob_to_file(
     download_path,
@@ -69,7 +73,7 @@ def download_blob_to_file(
         account_url=account_url,
         container_name=container_name,
         blob_name=blob_name,
-        credential=credential
+        credential=credential,
     )
 
     download_path.mkdir(parents=True, exist_ok=True)

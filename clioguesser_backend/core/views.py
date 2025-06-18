@@ -180,7 +180,9 @@ def update_leaderboard_api(request):
         update_leaderboard(initials, score)
         return JsonResponse({"message": "Leaderboard updated successfully"})
 
-    return JsonResponse({"error": "Invalid request method"}, status=405)
+    return JsonResponse(
+        {"error": f"Invalid request method {request.method}"}, status=405
+    )
 
 
 def get_leaderboard():

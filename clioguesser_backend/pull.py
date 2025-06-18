@@ -14,6 +14,7 @@ def pull_blob(
     print("Authenticating with Azure...")
     credential = DefaultAzureCredential()
 
+    print("Creating BlobClient...", account_url, container_name, blob_name)
     blob_client = BlobClient(
         account_url=account_url,
         container_name=container_name,
@@ -35,7 +36,7 @@ def main():
     db_account_url = os.getenv("DB_ACCOUNT_URL")
     container_name = os.getenv("DB_CONTAINER_NAME", "databases")
     db_name = Path(os.getenv("DB_NAME"))
-    blob_name = db_name.stem
+    blob_name = db_name.parts[-1]
     download_path = db_name.parents[0]
 
     pull_blob(download_path, db_account_url, container_name, blob_name)

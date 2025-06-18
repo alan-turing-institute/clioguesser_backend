@@ -16,7 +16,7 @@ cleanup() {
 
   python push.py
 
-  echo "Application (or sleep) has terminated. Exiting container."
+  echo "Application has terminated. Exiting container."
   exit 0
 }
 
@@ -25,13 +25,13 @@ trap 'cleanup' TERM
 trap 'cleanup' INT # SIGINT will also call cleanup now
 
 echo "Pulling"
-python pull.py
+python pull.py || exit 1
 
 echo "Starting ClioGuesser backend (shell is PID $$)..."
 
 # Run the application in the background
 # The shell remains PID 1 and can catch signals
-gunicorn clioguesser_backend.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 120 --log-level info &
+gunicorn clioguesser_backend.wsgi:application --bind 0.0.0.0:80 --workers 3 --timeout 120 --log-level info &
 APP_PID=$! # Store the PID of the background process
 
 echo "Application (PID $APP_PID) started. Waiting for signals..."
