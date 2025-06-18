@@ -26,7 +26,6 @@ def push_blob(db_account_url, container_name, blob_name, download_path):
 
 
 def main():
-    # Example usage
     db_account_url = os.getenv("DB_ACCOUNT_URL")
     container_name = os.getenv("DB_CONTAINER_NAME", "databases")
     db_name = Path(os.getenv("DB_NAME"))

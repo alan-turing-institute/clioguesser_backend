@@ -14,8 +14,6 @@ cleanup() {
     wait "$APP_PID" || true # '|| true' to prevent script from exiting if wait fails
   fi
 
-  python push.py
-
   echo "Application has terminated. Exiting container."
   exit 0
 }
