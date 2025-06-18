@@ -65,12 +65,18 @@ TEMPLATES = [
 WSGI_APPLICATION = "clioguesser_backend.wsgi.application"
 ASGI_APPLICATION = "clioguesser_backend.asgi.application"
 
+db_path: Path = env("DB_NAME", cast=Path)
+if db_path.parts[1] == "home":
+    # Special case for Azure App Service, where we need to copy
+    # the db from blob storage to the semi-persistent /home directory.
+    assert db_path.exists(), "Expected database file to exist already"
+
 DATABASES = {
     "default": {
         "ENGINE": "django.contrib.gis.db.backends.spatialite",
         # Path to your SQLite database file.
         # Will be created if it doesn't exist.
-        "NAME": env("DB_NAME", cast=Path),
+        "NAME": db_path,
     }
 }
 

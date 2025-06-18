@@ -18,13 +18,18 @@ RUN pip install --upgrade pip
 
 WORKDIR /app
 
+# Install Python dependencies
 COPY requirements.txt .
+RUN pip install -r requirements.txt
+
 COPY clioguesser_backend/ ./clioguesser_backend/
 
-# Install Python dependencies
-RUN pip install -r requirements.txt
+RUN apk add --no-cache tini
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app/clioguesser_backend
+
+ENTRYPOINT ["tini", "--"]
+CMD ["./startup.sh"]
