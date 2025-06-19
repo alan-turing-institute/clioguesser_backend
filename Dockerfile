@@ -29,6 +29,11 @@ RUN pip install -r requirements.txt
 
 COPY clioguesser_backend/ ./clioguesser_backend/
 
+RUN ssh-keygen -A
+
+ENV SSH_PASSWD="root:Docker!"
+RUN echo "$SSH_PASSWD" | chpasswd
+
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
@@ -36,3 +41,6 @@ WORKDIR /app/clioguesser_backend
 
 ENTRYPOINT ["tini", "--"]
 CMD ["./startup.sh"]
+
+# Expose the SSH port
+EXPOSE 22 2222 80

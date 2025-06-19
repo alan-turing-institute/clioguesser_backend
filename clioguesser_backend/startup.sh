@@ -6,14 +6,13 @@ APP_PID=0
 cleanup() {
   echo "SIGTERM received by shell (PID $$), pushing database..."
 
-  python push.py || exit 1
   # If your application is a long-running process that was put in background
-#  if [ "$APP_PID" -ne 0 ]; then
-#    echo "Sending SIGTERM to application (PID $APP_PID)..."
-#    kill -TERM "$APP_PID"
-#     Wait for the application to actually terminate
-#    wait "$APP_PID" || true # '|| true' to prevent script from exiting if wait fails
-#  fi
+  if [ "$APP_PID" -ne 0 ]; then
+    echo "Sending SIGTERM to application (PID $APP_PID)..."
+    kill -TERM "$APP_PID"
+     Wait for the application to actually terminate
+    wait "$APP_PID" || true # '|| true' to prevent script from exiting if wait fails
+  fi
 
   echo "Application has terminated. Exiting container."
   exit 0

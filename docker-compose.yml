@@ -24,6 +24,7 @@ services:
       - ./clioguesser_backend/clioguesser_backend:/app/clioguesser_backend/clioguesser_backend
       - ./clioguesser_backend/manage.py:/app/clioguesser_backend/manage.py
       - ./clioguesser_backend/core:/app/clioguesser_backend/core
+      - ./database:/database
     depends_on:
       - postgis-db
     networks:
@@ -31,7 +32,7 @@ services:
     command: >
       sh -c "python3 manage.py migrate &&
              python3 manage.py createcachetable &&
-             python3 manage.py runserver
+             python3 manage.py runserver 0.0.0.0:8000"
 
 volumes:
   postgres_data:

@@ -59,7 +59,9 @@ def pull_blob(
 
 def main():
     # Example usage
-    db_account_url = os.getenv("DB_ACCOUNT_URL")
+    db_account_url = (
+        f"https://{os.getenv("DB_STORAGE_ACCOUNT_NAME")}.blob.core.windows.net/"
+    )
     container_name = os.getenv("DB_CONTAINER_NAME", "databases")
     db_name = Path(os.getenv("DB_NAME"))
     blob_name = db_name.parts[-1]
