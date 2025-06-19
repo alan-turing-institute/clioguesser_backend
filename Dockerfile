@@ -12,7 +12,11 @@ RUN apk add --no-cache \
     libpq-dev \
     geos-dev \
     libspatialite-dev \
-    tini
+    tini \
+    openssh
+
+# Create SSH runtime directory
+RUN mkdir -p /var/run/sshd
 
 # Upgrade pip
 RUN pip install --upgrade pip

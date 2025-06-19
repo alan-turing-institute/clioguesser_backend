@@ -65,10 +65,10 @@ def main():
     blob_name = db_name.parts[-1]
     download_path = db_name.parents[0]
 
-    if db_name.exists():
-        push_blob(download_path, db_account_url, container_name, blob_name)
-    else:
-        pull_blob(download_path, db_account_url, container_name, blob_name)
+    # if db_name.exists():
+    #     push_blob(download_path, db_account_url, container_name, blob_name)
+    # else:
+    pull_blob(download_path, db_account_url, container_name, blob_name)
 
 
 if __name__ == "__main__":
