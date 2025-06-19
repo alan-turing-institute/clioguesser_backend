@@ -15,7 +15,6 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-      args:
     container_name: clioguesser-backend
     ports:
       - "8000:8000"
@@ -31,7 +30,8 @@ services:
       - clioguesser-net
     command: >
       sh -c "python3 manage.py migrate &&
-             gunicorn clioguesser_backend.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 120 --log-level info"
+             python3 manage.py createcachetable &&
+             python3 manage.py runserver
 
 volumes:
   postgres_data:

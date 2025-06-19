@@ -4,6 +4,7 @@ import time
 from django.contrib.gis.db.models.functions import AsGeoJSON
 from django.http import JsonResponse, StreamingHttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django_ratelimit.decorators import ratelimit
 from shapely.geometry import shape as shapely_shape
 
 from .models import Cliopatria
@@ -124,6 +125,7 @@ def get_colours(shapes):
     return shapes
 
 
+@ratelimit(key="ip", rate="1000/h")
 def polities_for_year_api(request):
     year = request.GET.get("year")
     if year is None:
@@ -154,6 +156,7 @@ def update_leaderboard(initials, score):
         leaderboard_entry.save()
 
 
+@ratelimit(key="ip", rate="1000/h")
 @csrf_exempt
 def update_leaderboard_api(request):
     """
@@ -201,6 +204,7 @@ def get_leaderboard():
     ]
 
 
+@ratelimit(key="ip", rate="1000/h")
 def leaderboard_api(request):
     """
     API endpoint to retrieve the leaderboard.
@@ -237,6 +241,7 @@ def calculate_score(min_year, max_year, true_year, guess_year, multiplier):
     return score
 
 
+@ratelimit(key="ip", rate="1000/h")
 def get_score_api(request):
     """
     API endpoint to calculate the score based on the provided parameters.

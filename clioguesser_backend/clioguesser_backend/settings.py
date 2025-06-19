@@ -29,7 +29,10 @@ INSTALLED_APPS = [
     "corsheaders",
 ]
 
-CORS_ALLOWED_ORIGINS = [x.strip() for x in env("CORS_ALLOWED_ORIGINS", default="http://localhost:5173").split(",")]
+CORS_ALLOWED_ORIGINS = [
+    x.strip()
+    for x in env("CORS_ALLOWED_ORIGINS", default="http://localhost:5173").split(",")
+]
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -61,6 +64,20 @@ TEMPLATES = [
         },
     },
 ]
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "my_cache_table",  # This is the name of the database table for your cache
+        "TIMEOUT": 3600,
+        "OPTIONS": {
+            "MAX_ENTRIES": 500,  # Maximum number of entries allowed in the cache (default is 300)
+            # "CULL_FREQUENCY": 3, # How often to cull expired entries (default is 3)
+        },
+    }
+}
+
+RATELIMIT_USE_CACHE = "default"
 
 WSGI_APPLICATION = "clioguesser_backend.wsgi.application"
 ASGI_APPLICATION = "clioguesser_backend.asgi.application"
