@@ -168,15 +168,15 @@ def update_leaderboard(initials, score):
     #     leaderboard_entry.score = score
     #     leaderboard_entry.save()
     # TABLE_CLIENT.list_entities()
-    for entry in TABLE_CLIENT.query_entities("initials eq ?", initials):
-        if entry["score"] < score:
-            entry["score"] = score
-            TABLE_CLIENT.update_entity(entry, mode="MERGE")
-            return
+    # for entry in TABLE_CLIENT.query_entities("initials eq @initials", parameters={"initials": initials}):
+    #     if entry["score"] < score:
+    #         entry["score"] = score
+    #         TABLE_CLIENT.update_entity(entry, mode="MERGE")
+    #         return
 
     previous = list(
         TABLE_CLIENT.query_entities(
-            "RowKey eq @initials", parameters={"initials": "IAN"}
+            "RowKey eq @initials", parameters={"initials": initials}
         )
     )
     if previous and previous[0]["score"] < score:

@@ -43,4 +43,4 @@ ENTRYPOINT ["tini", "--"]
 CMD ["./startup.sh"]
 
 # Expose the SSH port
-EXPOSE 22 2222 80
+EXPOSE 80
