@@ -1,5 +1,6 @@
-from django.db import models
 from django.contrib.gis.db import models as geomodels
+from django.db import models
+
 
 class Cliopatria(models.Model):
     """
@@ -22,7 +23,8 @@ class Cliopatria(models.Model):
 
     def __str__(self):
         return "Name: %s" % self.name
-    
+
+
 class Leaderboard(models.Model):
     """
     Model representing an arcade style leaderboard entry.

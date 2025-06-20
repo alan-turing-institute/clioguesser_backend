@@ -10,7 +10,7 @@ Back end repo for the Clioguesser historical geography game
 
 <!-- 2. Create a virtual environment:
    ```
-   python -m venv venv
+   python3.12 -m venv venv
    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
    ```
 
@@ -20,11 +20,11 @@ Back end repo for the Clioguesser historical geography game
    ```
 
 4. Install GDAL and GEOS for your operating system:
-   - **Ubuntu**: 
+   - **Ubuntu**:
      ```
      sudo apt-get install gdal-bin libgdal-dev
      ```
-   - **macOS**: 
+   - **macOS**:
      ```
      brew install gdal
      ```
@@ -107,7 +107,7 @@ curl -X GET "http://localhost:8000/api/score/?min_year=1000&max_year=2000&true_y
 
 If you add a new model, you need to create a migration file:
 ```
-   cd clioguesser_backend 
+   cd clioguesser_backend
    python manage.py makemigrations
 ```
 

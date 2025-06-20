@@ -6,10 +6,8 @@ services:
       POSTGRES_DB: clioguesser
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-    ports:
-      - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./postgres_data:/var/lib/postgresql/data
     networks:
       - clioguesser-net
 
@@ -17,12 +15,6 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-      args:
-        DB_NAME: clioguesser
-        DB_USER: postgres
-        DB_PASSWORD: postgres
-        DB_HOST: localhost
-        DB_PORT: 5432
     container_name: clioguesser-backend
     ports:
       - "8000:8000"
@@ -32,14 +24,14 @@ services:
       - ./clioguesser_backend/clioguesser_backend:/app/clioguesser_backend/clioguesser_backend
       - ./clioguesser_backend/manage.py:/app/clioguesser_backend/manage.py
       - ./clioguesser_backend/core:/app/clioguesser_backend/core
+      - ./database:/database
     depends_on:
       - postgis-db
     networks:
       - clioguesser-net
     command: >
-      sh -c "sleep 2 &&
-             python3 manage.py migrate &&
-             python3 manage.py populate_cliopatria data/cliopatria_polities_only.geojson &&
+      sh -c "python3 manage.py migrate &&
+             python3 manage.py createcachetable &&
              python3 manage.py runserver 0.0.0.0:8000"
 
 volumes:

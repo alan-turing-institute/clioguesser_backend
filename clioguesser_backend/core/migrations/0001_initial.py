@@ -8,27 +8,32 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Cliopatria',
+            name="Cliopatria",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('geom', django.contrib.gis.db.models.fields.MultiPolygonField(srid=4326)),
-                ('simplified_geom', django.contrib.gis.db.models.fields.MultiPolygonField(srid=4326)),
-                ('name', models.CharField(max_length=100)),
-                ('wikipedia_name', models.CharField(max_length=100, null=True)),
-                ('seshat_id', models.CharField(max_length=100)),
-                ('area', models.FloatField()),
-                ('start_year', models.IntegerField()),
-                ('end_year', models.IntegerField()),
-                ('polity_start_year', models.IntegerField()),
-                ('polity_end_year', models.IntegerField()),
-                ('colour', models.CharField(max_length=7)),
-                ('components', models.CharField(max_length=500, null=True)),
-                ('member_of', models.CharField(max_length=500, null=True)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "geom",
+                    django.contrib.gis.db.models.fields.MultiPolygonField(srid=4326),
+                ),
+                (
+                    "simplified_geom",
+                    django.contrib.gis.db.models.fields.MultiPolygonField(srid=4326),
+                ),
+                ("name", models.CharField(max_length=100)),
+                ("wikipedia_name", models.CharField(max_length=100, null=True)),
+                ("seshat_id", models.CharField(max_length=100)),
+                ("area", models.FloatField()),
+                ("start_year", models.IntegerField()),
+                ("end_year", models.IntegerField()),
+                ("polity_start_year", models.IntegerField()),
+                ("polity_end_year", models.IntegerField()),
+                ("colour", models.CharField(max_length=7)),
+                ("components", models.CharField(max_length=500, null=True)),
+                ("member_of", models.CharField(max_length=500, null=True)),
             ],
         ),
     ]

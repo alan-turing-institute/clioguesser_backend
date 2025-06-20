@@ -1,11 +1,26 @@
-from django.contrib.gis.db.models.functions import AsGeoJSON
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.http import StreamingHttpResponse
-from .models import Cliopatria
-from shapely.geometry import shape as shapely_shape
 import json
+import os
 import time
+
+from azure.data.tables import TableClient
+from azure.identity import DefaultAzureCredential
+from django.contrib.gis.db.models.functions import AsGeoJSON
+from django.http import JsonResponse, StreamingHttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django_ratelimit.decorators import ratelimit
+from shapely.geometry import shape as shapely_shape
+
+from .models import Cliopatria
+
+STORAGE_ACCOUNT_NAME = (
+    f"https://{os.getenv("DB_STORAGE_ACCOUNT_NAME")}.table.core.windows.net/"
+)
+TABLE_NAME = os.getenv("DB_TABL_NAME", "leaderboard")
+TABLE_CLIENT = TableClient(
+    endpoint=STORAGE_ACCOUNT_NAME,
+    table_name=TABLE_NAME,
+    credential=DefaultAzureCredential(),
+)
 
 
 def get_polities_for_year(displayed_year):
@@ -98,8 +113,8 @@ def get_colours(shapes):
                 break
         else:
             # If all colours are used, add a new random colour
-            import random
             import colorsys
+            import random
 
             # Generate a new random colour
             while True:
@@ -123,6 +138,7 @@ def get_colours(shapes):
     return shapes
 
 
+@ratelimit(key="ip", rate="1000/h")
 def polities_for_year_api(request):
     year = request.GET.get("year")
     if year is None:
@@ -145,14 +161,38 @@ def update_leaderboard(initials, score):
         initials (str): The player's initials.
         score (int): The player's score.
     """
-    from .models import Leaderboard
+    # from .models import Leaderboard
 
-    leaderboard_entry, created = Leaderboard.objects.get_or_create(initials=initials)
-    if created or leaderboard_entry.score < score:
-        leaderboard_entry.score = score
-        leaderboard_entry.save()
+    # leaderboard_entry, created = Leaderboard.objects.get_or_create(initials=initials)
+    # if created or leaderboard_entry.score < score:
+    #     leaderboard_entry.score = score
+    #     leaderboard_entry.save()
+    # TABLE_CLIENT.list_entities()
+    # for entry in TABLE_CLIENT.query_entities("initials eq @initials", parameters={"initials": initials}):
+    #     if entry["score"] < score:
+    #         entry["score"] = score
+    #         TABLE_CLIENT.update_entity(entry, mode="MERGE")
+    #         return
+
+    previous = list(
+        TABLE_CLIENT.query_entities(
+            "RowKey eq @initials", parameters={"initials": initials}
+        )
+    )
+    if previous and previous[0]["score"] < score:
+        previous[0]["score"] = score
+        TABLE_CLIENT.update_entity(previous[0], mode="MERGE")
+    else:
+        # Create a new entry if it doesn't exist or the score is higher
+        entity = {
+            "PartitionKey": "my-partition",
+            "RowKey": initials,
+            "score": score,
+        }
+        TABLE_CLIENT.create_entity(entity)
 
 
+@ratelimit(key="ip", rate="1000/h")
 @csrf_exempt
 def update_leaderboard_api(request):
     """
@@ -177,9 +217,12 @@ def update_leaderboard_api(request):
             return JsonResponse({"error": "'score' must be an integer"}, status=400)
 
         update_leaderboard(initials, score)
+
         return JsonResponse({"message": "Leaderboard updated successfully"})
 
-    return JsonResponse({"error": "Invalid request method"}, status=405)
+    return JsonResponse(
+        {"error": f"Invalid request method {request.method}"}, status=405
+    )
 
 
 def get_leaderboard():
@@ -189,15 +232,16 @@ def get_leaderboard():
     Returns:
         list: A list of dictionaries containing initials and scores.
     """
-    from .models import Leaderboard
 
-    leaderboard_entries = Leaderboard.objects.all().order_by("-score")
+    # leaderboard_entries = Leaderboard.objects.all().order_by("-score")
+    leaderboard_entries = TABLE_CLIENT.list_entities()
     return [
-        {"initials": entry.initials, "score": entry.score}
-        for entry in leaderboard_entries
+        {"initials": entry["RowKey"], "score": entry["score"]}
+        for entry in sorted(leaderboard_entries, key=lambda x: x["score"], reverse=True)
     ]
 
 
+@ratelimit(key="ip", rate="1000/h")
 def leaderboard_api(request):
     """
     API endpoint to retrieve the leaderboard.
@@ -234,6 +278,7 @@ def calculate_score(min_year, max_year, true_year, guess_year, multiplier):
     return score
 
 
+@ratelimit(key="ip", rate="1000/h")
 def get_score_api(request):
     """
     API endpoint to calculate the score based on the provided parameters.
